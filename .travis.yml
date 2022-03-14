@@ -1,0 +1,31 @@
+language: python
+python:
+  - "3.8"
+  - "3.9"
+# command to install dependencies
+install:
+  - pip install -r requirements.txt
+# command to run tests
+before_install:
+- mysql -e 'CREATE DATABASE videojuego CHARACTER SET utf8mb4
+COLLATE utf8mb4_general_ci;'
+- mysql -e 'CREATE USER 'videojuegouser'@'localhost' identified by 'Contraseña7654/(%&/';'
+- mysql -e 'GRANT ALL PRIVILEGES ON videojuego.* TO 'videojuegouser'@'localhost';'
+- mysql -e 'FLUSH PRIVILEGES;'
+services:
+  - mysql
+script:
+  - pycodestyle *.py
+  - coverage run --branch test_calculadora.py
+  - coverage report --fail-under=95
+  - python3 test_calculadora.py
+pos-script:
+  -sudo apt-install wget
+  -sudo wget ~ https://chromedriver.storage.googleapis.com/99.0.4844.51/chromedriver_linux64.zip
+  -mkadir drivers
+  -mv ~/chromediver_linux64.zip ~/drivers
+  -sudo apt install unzip
+  -unzip ~/drivers/chromedriver_linux64.zip
+
+  
+
